@@ -19,6 +19,7 @@ export async function POST(req: Request) {
         status: 404,
       });
     }
+
     const data: Partial<User> = {
       ...user,
       password: undefined,
