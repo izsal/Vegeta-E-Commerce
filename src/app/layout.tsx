@@ -23,8 +23,8 @@ export const metadata: Metadata = {
   description: "Vegeta",
   applicationName: "Vegeta",
   authors: {
-    name: "Taufan Fadhilah",
-    url: "https://taufanfadhilah.web.id/",
+    name: "Izsal QurlinasAfandi",
+    url: "https://izsal.web.id",
   },
   icons: "/logo.svg",
 };
@@ -37,9 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(poppins.className, "text-neutral-600")}>
-        <Provider>
-          {children}
-        </Provider>
+        <Provider>{children}</Provider>
         <Toaster />
       </body>
     </html>
