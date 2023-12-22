@@ -42,10 +42,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { signOut, useSession } from "next-auth/react";
 
-interface HeaderProps { }
+interface HeaderProps {}
 
 const CommonHeader: React.FC<HeaderProps> = () => {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
 
   return (
     <>
@@ -131,7 +131,6 @@ const CommonHeader: React.FC<HeaderProps> = () => {
               </CommonNotificationBadge>
               <div className="w-[42px] h-[42px] rounded-full relative overflow-hidden">
                 <Image
-                  // src="https://ui-avatars.com/api/?name=Taufan+Fadhilah&background=random"
                   src={`https://ui-avatars.com/api/?name=${session.user.name}h&background=random`}
                   layout="fill"
                   alt=""
@@ -155,9 +154,13 @@ const CommonHeader: React.FC<HeaderProps> = () => {
                   <DropdownMenuItem>
                     <Link href="/history">History Transactions</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => signOut({
-                    callbackUrl: "/auth/signin"
-                  })}>
+                  <DropdownMenuItem
+                    onClick={() =>
+                      signOut({
+                        callbackUrl: "/auth/signin",
+                      })
+                    }
+                  >
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -171,7 +174,6 @@ const CommonHeader: React.FC<HeaderProps> = () => {
                 >
                   Daftar Sekarang
                 </Button>
-
               </Link>
               <Link href="/auth/signin">
                 <Button
@@ -179,7 +181,6 @@ const CommonHeader: React.FC<HeaderProps> = () => {
                 >
                   Masuk akun
                 </Button>
-
               </Link>
             </div>
           )}
