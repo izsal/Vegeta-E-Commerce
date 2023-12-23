@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // components
 import FilterCategory from "@/components/filter/filter-category";
@@ -25,11 +25,39 @@ import { hover } from "@/lib/hover";
 // assets
 import ProductsJSON from "@/assets/json/products.json";
 
+// services
+import { useGetAllProductsQuery } from "@/services/product";
+import { useRouter, useSearchParams } from "next/navigation";
+
 export default function Products() {
   const isNoData = false;
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  // state
+  const [activePage, setActivePage] = useState(
+    parseInt(searchParams?.get("page") || "1") || 1
+  );
+  //redux
+  const { data, isLoading } = useGetAllProductsQuery({
+    page: searchParams.get("page") || undefined,
+  });
+  const { data: recomendationProducts, isLoading: recomendationIsLoading } =
+    useGetAllProductsQuery({});
 
-  const [activePage, setActivePage] = useState(1);
-  const [totalPage] = useState(5);
+  const handleChangeFilter = (key: string, value: string) => {
+    const newQuery: Record<string, string> = {};
+    searchParams.forEach((params, key) => {
+      newQuery[key] = params;
+    });
+    newQuery[key] = value;
+
+    const urlParams = new URLSearchParams(newQuery).toString();
+    router.replace(`/product?${urlParams}`);
+  };
+
+  useEffect(() => {
+    handleChangeFilter("page", activePage.toString());
+  }, [activePage]);
 
   return (
     <main className="flex flex-col w-full min-h-screen items-center pb-8">
@@ -73,13 +101,16 @@ export default function Products() {
               </div>
               <ProductShowcase
                 gridConfig={"grid-cols-3"}
-                products={ProductsJSON}
+                products={data?.data?.data || []}
+                isLoading={isLoading}
               />
 
               <div className="py-12">
                 <CommonPagination
                   page={activePage}
-                  total={totalPage}
+                  total={
+                    data?.data?.total ? Math.ceil(data?.data?.total / 9) : 1
+                  }
                   onChange={(activePage) => setActivePage(activePage)}
                 />
               </div>
@@ -102,7 +133,11 @@ export default function Products() {
             Lihat Selengkapnya {">"}
           </Link>
         </div>
-        <ProductShowcase gridConfig={"grid-cols-4"} products={ProductsJSON} />
+        <ProductShowcase
+          gridConfig={"grid-cols-4"}
+          products={recomendationProducts?.data?.data.slice(0, 4) || []}
+          isLoading={recomendationIsLoading}
+        />
       </div>
     </main>
   );
