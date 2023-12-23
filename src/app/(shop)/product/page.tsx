@@ -40,6 +40,7 @@ export default function Products() {
   //redux
   const { data, isLoading } = useGetAllProductsQuery({
     page: searchParams.get("page") || undefined,
+    category: searchParams.get("category") || undefined,
   });
   const { data: recomendationProducts, isLoading: recomendationIsLoading } =
     useGetAllProductsQuery({});
@@ -65,7 +66,12 @@ export default function Products() {
         <div className="flex-[1] border border-gray-300 rounded-xl py-6 px-4 h-fit">
           <div className="text-2xl font-semibold">Filter</div>
           <div className="w-full separator my-4" />
-          <FilterCategory />
+          <FilterCategory
+            value={searchParams.get("category")?.split(",")}
+            onChange={(selectedCategories) =>
+              handleChangeFilter("category", selectedCategories.join(","))
+            }
+          />
           <div className="w-full separator my-4" />
           <FilterPrice />
           <div className="w-full separator my-4" />
