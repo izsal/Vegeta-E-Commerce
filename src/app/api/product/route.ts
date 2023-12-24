@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
       ],
     };
 
-    const totalProduct = await prisma.product.count({});
+    const totalProduct = await prisma.product.count({ where: queryConditions });
     const products = await prisma.product.findMany({
       take,
       skip,
