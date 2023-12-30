@@ -10,9 +10,12 @@ import ItemList from "./ItemList";
 import { cn, formatNumber } from "@/lib/utils";
 import { hover } from "@/lib/hover";
 import { useCheckoutsQuery } from "@/services/transaction";
+import { useState } from "react";
+import { DeliveryMethod } from "@/types/delivery-method";
 
 export default function Checkout() {
-  const deliveryMethod = "HOME_DELIVERY";
+  const [deliveryMethod, setDeliveryMethod] =
+    useState<DeliveryMethod>("HOME_DELIVERY");
 
   const { data } = useCheckoutsQuery();
   const products = data?.data || [];
@@ -40,7 +43,10 @@ export default function Checkout() {
 
             <div className="separator" />
 
-            <DeliveryOptions />
+            <DeliveryOptions
+              value={deliveryMethod}
+              onChange={setDeliveryMethod}
+            />
           </div>
 
           <div className="flex-1 h-auto">
