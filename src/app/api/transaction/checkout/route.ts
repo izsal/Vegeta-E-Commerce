@@ -35,3 +35,28 @@ export async function POST(req: NextRequest) {
     data: checkout,
   });
 }
+
+export async function GET() {
+  try {
+    const session = await getServerSession(authOptions);
+    const checkouts = await prisma.checkout.findMany({
+      where: {
+        userId: session?.user.id,
+      },
+      include: {
+        product: true,
+      },
+    });
+
+    return Response({
+      message: "Get list of checkout",
+      data: checkouts,
+    });
+  } catch (error) {
+    return Response({
+      message: "Checkout Failed",
+      data: error,
+      status: 500,
+    });
+  }
+}

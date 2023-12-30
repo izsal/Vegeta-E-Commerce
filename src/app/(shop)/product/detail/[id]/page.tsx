@@ -52,6 +52,7 @@ export default function Products({ params }: { params: { id: string } }) {
     const data = {
       product_id: params.id,
       qty: itemCount,
+      price: productDetails?.data?.price,
     };
     await checkoutMutation(data);
     return router.push("/checkout");
