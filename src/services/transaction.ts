@@ -1,5 +1,5 @@
 import BaseResponse from "@/types/response";
-import { Checkout, Product } from "@prisma/client";
+import { Checkout, DeliveryType, Product, Transaction } from "@prisma/client";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
 interface CheckoutResponse extends BaseResponse {
@@ -19,9 +19,20 @@ interface CheckoutsResponse extends BaseResponse {
   }[];
 }
 
+interface PaymentResponse extends BaseResponse {
+  data: Transaction;
+}
+
 interface CheckoutPayload {
   product_id: string;
   qty: number;
+}
+
+interface PaymentPayload {
+  application_fee: number;
+  asurance_fee: number;
+  delivery_fee: number;
+  delivery_type: DeliveryType;
 }
 
 export const transactionApi = createApi({
@@ -45,7 +56,15 @@ export const transactionApi = createApi({
       }),
       providesTags: ["checkout"],
     }),
+    payment: builder.mutation<PaymentResponse, PaymentPayload>({
+      query: (body) => ({
+        url: "/payment",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useCheckoutMutation, useCheckoutsQuery } = transactionApi;
+export const { useCheckoutMutation, useCheckoutsQuery, usePaymentMutation } =
+  transactionApi;
